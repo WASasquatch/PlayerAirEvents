@@ -15,7 +15,7 @@ public void playerFall(PlayerFallEvent e) {
 }
 	
 @EventHandler
-public void playerJump(PlayerAirbornEvent e) {
+public void playerAirborn(PlayerAirbornEvent e) {
 	Player player = e.getPlayer();
 	if ( player.isOnline() ) {
 		player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6You are airborn and rising &f"+e.getJumpedBlocks()+" &6blocks."));

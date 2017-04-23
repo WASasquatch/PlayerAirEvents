@@ -6,7 +6,7 @@
 
 ```java
 
-    @EventHandler
+          @EventHandler
 	  public void playerLanded(PlayerLandedEvent e) {
 		  Player player = e.getPlayer();
 		  if ( player.isOnline() ) {

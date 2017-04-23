@@ -14,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import wa.was.playerairevents.events.PlayerAirborneEvent;
 import wa.was.playerairevents.events.PlayerFallEvent;
@@ -66,6 +67,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 				|| player.getEyeLocation().getBlock().getType().equals(Material.LADDER) ) return;
 		if ( player.isOnGround() ) return;
 		Location f = e.getFrom(), t = e.getTo();
+		// Jump
 		if ( f.getY() < t.getY()
 				&& ! ( f.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) )
 				&& t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) {
@@ -77,6 +79,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 				jumped = hasJumped.get(player.getUniqueId());
 			}
 			Bukkit.getServer().getPluginManager().callEvent(new PlayerJumpEvent(player, ( jumped / 2 ), e.getFrom(), e.getTo()));
+		// Airborne
 		} else if ( f.getY() < t.getY()
 				&& t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) {
 			if ( ! ( wasAirborn.containsKey(player.getUniqueId()) ) ) {
@@ -90,6 +93,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 			}
 			int jumped = hasJumped.get(player.getUniqueId());
 			Bukkit.getServer().getPluginManager().callEvent(new PlayerAirborneEvent(player, ( jumped / 2 ), e.getFrom(), e.getTo()));
+		// Falling
 		} else if ( f.getY() > t.getY() 
 				&& t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) {
 			if ( ! ( wasAirborn.containsKey(player.getUniqueId()) ) ) {
@@ -110,6 +114,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 				fallen = hasFallen.get(player.getUniqueId());
 			}
 			Bukkit.getServer().getPluginManager().callEvent(new PlayerFallEvent(player,  ( fallen / 2 ), ( jumped / 2 ), e.getFrom(), e.getTo()));
+		// Landed (?)
 		} else if ( wasAirborn.containsKey(player.getUniqueId()) 
 				&& wasAirborn.get(player.getUniqueId()) ) {
 			int jumped = 0;
@@ -124,6 +129,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 			hasJumped.remove(player.getUniqueId());
 			hasFallen.remove(player.getUniqueId());
 			wasAirborn.put(player.getUniqueId(), false);
+		// Surely must be landed? (Don't call me Sherly)
 		} else if ( wasAirborn.containsKey(player.getUniqueId()) 
 				&& ! ( wasAirborn.get(player.getUniqueId()) )
 				&& ! ( t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) 

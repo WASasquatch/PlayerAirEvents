@@ -29,7 +29,7 @@ import org.bukkit.event.HandlerList;
  *	
  *************************/
 
-public class PlayerAirbornEvent extends Event {
+public class PlayerAirborneEvent extends Event {
 
 	private static final HandlerList HANDLERS = new HandlerList();
 	public static HandlerList getHandlerList() {
@@ -43,7 +43,7 @@ public class PlayerAirbornEvent extends Event {
 	
     private Location to;
 
-    public PlayerAirbornEvent(Player player, Integer jumped, Location from, Location to) {
+    public PlayerAirborneEvent(Player player, Integer jumped, Location from, Location to) {
 		this.player = player;
 		this.jumped = jumped;
 		this.from = from;

@@ -15,7 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import wa.was.playerairevents.events.PlayerAirbornEvent;
+import wa.was.playerairevents.events.PlayerAirborneEvent;
 import wa.was.playerairevents.events.PlayerFallEvent;
 import wa.was.playerairevents.events.PlayerJumpEvent;
 import wa.was.playerairevents.events.PlayerLandedEvent;
@@ -90,7 +90,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 				hasJumped.put(player.getUniqueId(), 1);
 			}
 			int jumped = hasJumped.get(player.getUniqueId());
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerAirbornEvent(player, ( jumped / 2 ), e.getFrom(), e.getTo()));
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerAirborneEvent(player, ( jumped / 2 ), e.getFrom(), e.getTo()));
 		} else if ( f.getY() > t.getY() 
 				&& t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) {
 			if ( ! ( wasAirborn.containsKey(player.getUniqueId()) ) ) {

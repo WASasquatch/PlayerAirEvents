@@ -60,7 +60,6 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 	
 	@EventHandler(priority=EventPriority.LOWEST)
 	public void playerInAir(PlayerMoveEvent e) {
-		if ( e.isCancelled() ) return;
 		Player player = e.getPlayer();
 		if ( player.getEyeLocation().getBlock().getType().equals(Material.WATER)
 				|| player.getEyeLocation().getBlock().getType().equals(Material.STATIONARY_WATER)

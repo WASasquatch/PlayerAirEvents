@@ -52,11 +52,12 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 	public static PlayerInAir getInstance() {
 		return instance;
 	}
-	private Map<UUID, Integer> hasFallen;
-	private Map<UUID, Integer> hasJumped;
 	
-	private Map<UUID, Boolean> wasAirborn;
 	private Map<UUID, Location> fallLocation;
+	private Map<UUID, Integer> hasFallen;
+	
+	private Map<UUID, Integer> hasJumped;
+	private Map<UUID, Boolean> wasAirborn;
 	
 	public PlayerInAir() {
 		instance = this;
@@ -164,7 +165,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 	public void resetPlayer(Player player) {
 		hasJumped.remove(player.getUniqueId());
 		hasFallen.remove(player.getUniqueId());
-		wasAirborn.put(player.getUniqueId(), false);
+		wasAirborn.remove(player.getUniqueId());
 		fallLocation.remove(player.getUniqueId());
 	}
 	

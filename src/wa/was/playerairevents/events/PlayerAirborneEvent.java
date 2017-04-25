@@ -29,6 +29,7 @@ import org.bukkit.event.HandlerList;
  *	
  *************************/
 
+@Deprecated
 public class PlayerAirborneEvent extends Event {
 
 	private static final HandlerList HANDLERS = new HandlerList();
@@ -36,7 +37,6 @@ public class PlayerAirborneEvent extends Event {
         return HANDLERS;
     }
 	private Location from;
-	private Boolean isCancelled;
 	private Integer jumped;
 	
 	private Player player;
@@ -48,7 +48,6 @@ public class PlayerAirborneEvent extends Event {
 		this.jumped = jumped;
 		this.from = from;
 		this.to = to;
-        this.isCancelled = false;
     }
 
     public Location getFrom() {
@@ -70,14 +69,6 @@ public class PlayerAirborneEvent extends Event {
 	
 	public Location getTo() {
     	return this.to;
-    }
-	
-	public boolean isCancelled() {
-        return this.isCancelled;
-    }
-
-    public void setCancelled(boolean isCancelled) {
-        this.isCancelled = isCancelled;
     }
     
 }

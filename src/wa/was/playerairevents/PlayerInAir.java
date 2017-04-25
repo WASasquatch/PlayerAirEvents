@@ -19,6 +19,7 @@ import wa.was.playerairevents.events.PlayerAirborneEvent;
 import wa.was.playerairevents.events.PlayerFallEvent;
 import wa.was.playerairevents.events.PlayerJumpEvent;
 import wa.was.playerairevents.events.PlayerLandedEvent;
+import wa.was.playerairevents.events.PlayerRisingEvent;
 import wa.was.playerairevents.spigot.events.PlayerExitsEvent;
 
 /*************************
@@ -45,6 +46,7 @@ import wa.was.playerairevents.spigot.events.PlayerExitsEvent;
  *	
  *************************/
 
+@SuppressWarnings("deprecation")
 public class PlayerInAir extends JavaPlugin implements Listener {
 	
 	private static PlayerInAir instance;
@@ -52,12 +54,11 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 	public static PlayerInAir getInstance() {
 		return instance;
 	}
-	
-	private Map<UUID, Location> fallLocation;
 	private Map<UUID, Integer> hasFallen;
-	
 	private Map<UUID, Integer> hasJumped;
+	
 	private Map<UUID, Boolean> wasAirborn;
+	private Map<UUID, Location> fallLocation;
 	
 	public PlayerInAir() {
 		instance = this;
@@ -115,6 +116,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 			}
 			int jumped = hasJumped.get(player.getUniqueId());
 			Bukkit.getServer().getPluginManager().callEvent(new PlayerAirborneEvent(player, jumped, e.getFrom(), e.getTo()));
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerRisingEvent(player, jumped, e.getFrom(), e.getTo()));
 		// Falling
 		} else if ( f.getBlock().getY() > t.getBlock().getY() 
 				&& t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) {
@@ -165,7 +167,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 	public void resetPlayer(Player player) {
 		hasJumped.remove(player.getUniqueId());
 		hasFallen.remove(player.getUniqueId());
-		wasAirborn.remove(player.getUniqueId());
+		wasAirborn.put(player.getUniqueId(), false);
 		fallLocation.remove(player.getUniqueId());
 	}
 	

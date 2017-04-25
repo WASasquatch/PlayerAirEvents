@@ -37,7 +37,6 @@ public class PlayerLandedEvent extends Event {
     }
 	private Integer fallen;
 	private Location from;
-	private Boolean isCancelled;
 	private Integer jumped;
 	
 	private Player player;
@@ -50,7 +49,6 @@ public class PlayerLandedEvent extends Event {
 		this.jumped = jumped;
 		this.from = from;
 		this.to = to;
-        this.isCancelled = false;
     }
 
     public Integer getFallenBlocks() {
@@ -76,14 +74,6 @@ public class PlayerLandedEvent extends Event {
 	
 	public Location getTo() {
     	return this.to;
-    }
-	
-	public boolean isCancelled() {
-        return this.isCancelled;
-    }
-
-    public void setCancelled(boolean isCancelled) {
-        this.isCancelled = isCancelled;
     }
     
 }

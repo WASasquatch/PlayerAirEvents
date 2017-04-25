@@ -17,6 +17,7 @@ public void playerFall(PlayerFallEvent e) {
 // DEPRECATED
 // This method doesn't properly reflect what's happening
 // And is being replaced with the PlayerRisingEvent in future builds
+@SuppressWarnings("deprecation")
 @EventHandler
 public void playerAirborn(PlayerAirborneEvent e) {
 	Player player = e.getPlayer();

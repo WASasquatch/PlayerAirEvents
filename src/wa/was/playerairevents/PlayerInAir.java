@@ -56,6 +56,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 	private Map<UUID, Integer> hasJumped;
 	
 	private Map<UUID, Boolean> wasAirborn;
+	private Map<UUID, Location> fallLocation;
 	
 	public PlayerInAir() {
 		instance = this;
@@ -68,6 +69,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 		wasAirborn = new HashMap<UUID, Boolean>();
 		hasJumped = new HashMap<UUID, Integer>();
 		hasFallen = new HashMap<UUID, Integer>();
+		fallLocation = new HashMap<UUID, Location>();
 	}
 	
 	@EventHandler(priority=EventPriority.LOWEST)
@@ -87,7 +89,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 		}
 		Location f = e.getFrom(), t = e.getTo();
 		// Jump
-		if ( f.getY() < t.getY()
+		if ( f.getBlock().getY() < t.getBlock().getY()
 				&& ! ( f.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) )
 				&& t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) {
 			if ( ! ( wasAirborn.containsKey(player.getUniqueId()) ) ) {
@@ -97,9 +99,9 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 			if ( hasJumped.containsKey(player.getUniqueId()) ) {
 				jumped = hasJumped.get(player.getUniqueId());
 			}
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerJumpEvent(player, ( jumped / 2 ), e.getFrom(), e.getTo()));
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerJumpEvent(player, jumped, e.getFrom(), e.getTo()));
 		// Airborne
-		} else if ( f.getY() < t.getY()
+		} else if ( f.getBlock().getY() < t.getBlock().getY()
 				&& t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) {
 			if ( ! ( wasAirborn.containsKey(player.getUniqueId()) ) ) {
 				wasAirborn.put(player.getUniqueId(), true);
@@ -111,28 +113,23 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 				hasJumped.put(player.getUniqueId(), 1);
 			}
 			int jumped = hasJumped.get(player.getUniqueId());
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerAirborneEvent(player, ( jumped / 2 ), e.getFrom(), e.getTo()));
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerAirborneEvent(player, jumped, e.getFrom(), e.getTo()));
 		// Falling
-		} else if ( f.getY() > t.getY() 
+		} else if ( f.getBlock().getY() > t.getBlock().getY() 
 				&& t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) {
 			if ( ! ( wasAirborn.containsKey(player.getUniqueId()) ) ) {
 				wasAirborn.put(player.getUniqueId(), true);
 			}
-			if ( hasFallen.containsKey(player.getUniqueId()) ) {
-				int fallen = hasFallen.get(player.getUniqueId());
-				hasFallen.put(player.getUniqueId(), fallen+1);
-			} else {
-				hasFallen.put(player.getUniqueId(), 1);
+			if ( ! ( fallLocation.containsKey(player.getUniqueId()) ) ) {
+				fallLocation.put(player.getUniqueId(), f.getBlock().getLocation());
 			}
+			int fallen = (int) Math.abs(( fallLocation.get(player.getUniqueId()).getY() - t.getBlock().getLocation().getY() ));
+			hasFallen.put(player.getUniqueId(), fallen);
 			int jumped = 0;
-			int fallen = 0;
 			if ( hasJumped.containsKey(player.getUniqueId()) ) {
 				jumped = hasJumped.get(player.getUniqueId());
 			}
-			if ( hasFallen.containsKey(player.getUniqueId()) ) {
-				fallen = hasFallen.get(player.getUniqueId());
-			}
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerFallEvent(player,  ( fallen / 2 ), ( jumped / 2 ), e.getFrom(), e.getTo()));
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerFallEvent(player, fallen, jumped, e.getFrom(), e.getTo()));
 		// Landed (?)
 		} else if ( wasAirborn.containsKey(player.getUniqueId()) 
 				&& wasAirborn.get(player.getUniqueId()) ) {
@@ -144,7 +141,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 			if ( hasFallen.containsKey(player.getUniqueId()) ) {
 				fallen = hasFallen.get(player.getUniqueId());
 			}
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerLandedEvent(player, ( fallen / 2 ), ( jumped / 2 ), e.getFrom(), e.getTo()));
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerLandedEvent(player, fallen, jumped, e.getFrom(), e.getTo()));
 			resetPlayer(player);
 		// Surely must be landed? (Don't call me Sherly)
 		} else if ( wasAirborn.containsKey(player.getUniqueId()) 
@@ -159,7 +156,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 			if ( hasFallen.containsKey(player.getUniqueId()) ) {
 				fallen = hasFallen.get(player.getUniqueId());
 			}
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerLandedEvent(player, ( fallen / 2 ), ( jumped / 2 ), e.getFrom(), e.getTo()));
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerLandedEvent(player, fallen, jumped, e.getFrom(), e.getTo()));
 			resetPlayer(player);
 		}
 	}
@@ -168,6 +165,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 		hasJumped.remove(player.getUniqueId());
 		hasFallen.remove(player.getUniqueId());
 		wasAirborn.put(player.getUniqueId(), false);
+		fallLocation.remove(player.getUniqueId());
 	}
 	
 }

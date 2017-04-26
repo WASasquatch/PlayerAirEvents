@@ -97,7 +97,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 			if ( ! ( wasAirborn.containsKey(player.getUniqueId()) ) ) {
 				wasAirborn.put(player.getUniqueId(), true);
 			}
-			int jumped = 0;
+			int jumped = 1;
 			if ( hasJumped.containsKey(player.getUniqueId()) ) {
 				jumped = hasJumped.get(player.getUniqueId());
 			}
@@ -128,31 +128,18 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 			}
 			int fallen = (int) Math.abs(( fallLocation.get(player.getUniqueId()).getY() - t.getBlock().getLocation().getY() ));
 			hasFallen.put(player.getUniqueId(), fallen);
-			int jumped = 0;
+			int jumped = 1;
 			if ( hasJumped.containsKey(player.getUniqueId()) ) {
 				jumped = hasJumped.get(player.getUniqueId());
 			}
 			Bukkit.getServer().getPluginManager().callEvent(new PlayerFallEvent(player, fallen, jumped, e.getFrom(), e.getTo()));
 		// Landed (?)
 		} else if ( wasAirborn.containsKey(player.getUniqueId()) 
-				&& wasAirborn.get(player.getUniqueId()) ) {
-			int jumped = 0;
-			int fallen = 0;
-			if ( hasJumped.containsKey(player.getUniqueId()) ) {
-				jumped = hasJumped.get(player.getUniqueId());
-			}
-			if ( hasFallen.containsKey(player.getUniqueId()) ) {
-				fallen = hasFallen.get(player.getUniqueId());
-			}
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerLandedEvent(player, fallen, jumped, e.getFrom(), e.getTo()));
-			resetPlayer(player);
-		// Surely must be landed? (Don't call me Sherly)
-		} else if ( wasAirborn.containsKey(player.getUniqueId()) 
-				&& ! ( wasAirborn.get(player.getUniqueId()) )
-				&& ! ( t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) 
-				&& f.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) {
-			int jumped = 0;
-			int fallen = 0;
+				&& wasAirborn.get(player.getUniqueId()) 
+				|| ( t.getBlock().getRelative(BlockFace.DOWN, 1).getType().isSolid()
+				&& f.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR) ) ) {
+			int jumped = 1;
+			int fallen = 1;
 			if ( hasJumped.containsKey(player.getUniqueId()) ) {
 				jumped = hasJumped.get(player.getUniqueId());
 			}

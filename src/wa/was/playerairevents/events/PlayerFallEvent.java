@@ -36,16 +36,19 @@ public class PlayerFallEvent extends Event {
         return HANDLERS;
     }
 	private Integer fallen;
+	private Location fallLocation;
 	private Location from;
 	private Integer jumped;
+
 	
 	private Player player;
 	
 	private Location to;
 	
-    public PlayerFallEvent(Player player, Integer fallen, Integer jumped, Location from, Location to) {
+    public PlayerFallEvent(Player player, Integer fallen, Integer jumped, Location from, Location to, Location fallLocation) {
 		this.player = player;
 		this.fallen = fallen;
+		this.fallLocation = fallLocation;
 		this.jumped = jumped;
 		this.from = from;
 		this.to = to;
@@ -57,6 +60,10 @@ public class PlayerFallEvent extends Event {
 
     public Location getFrom() {
     	return this.from;
+    }
+    
+    public Location getFallLocation() {
+    	return this.fallLocation;
     }
     
     @Override

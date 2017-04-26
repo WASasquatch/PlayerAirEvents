@@ -132,7 +132,7 @@ public class PlayerInAir extends JavaPlugin implements Listener {
 			if ( hasJumped.containsKey(player.getUniqueId()) ) {
 				jumped = hasJumped.get(player.getUniqueId());
 			}
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerFallEvent(player, fallen, jumped, e.getFrom(), e.getTo()));
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerFallEvent(player, fallen, jumped, e.getFrom(), e.getTo(), fallLocation.get(player.getUniqueId())));
 		// Landed (?)
 		} else if ( wasAirborn.containsKey(player.getUniqueId()) 
 				&& wasAirborn.get(player.getUniqueId()) 

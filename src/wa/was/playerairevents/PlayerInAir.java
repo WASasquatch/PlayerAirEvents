@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,8 +15,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.BlockIterator;
+import org.bukkit.util.Vector;
 
 import wa.was.playerairevents.events.PlayerFallEvent;
+import wa.was.playerairevents.events.PlayerFlyingEvent;
 import wa.was.playerairevents.events.PlayerJumpEvent;
 import wa.was.playerairevents.events.PlayerLandedEvent;
 import wa.was.playerairevents.events.PlayerRisingEvent;
@@ -125,6 +129,31 @@ public final class PlayerInAir extends JavaPlugin implements Listener {
 					.callEvent(new PlayerLandedEvent(player, fallen, jumped, e.getFrom(), e.getTo()));
 			resetPlayer(player);
 		}
+
+		// Fly Event
+		if (t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR)
+				&& f.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR)) {
+
+			BlockIterator trace = new BlockIterator(f.getWorld(), f.toVector(),
+					new Vector(BlockFace.DOWN.getModX(), BlockFace.DOWN.getModY(), BlockFace.DOWN.getModZ()), 0, 256);
+
+			Block groundBlock = null;
+
+			int toGround = 0;
+			while (trace.hasNext()) {
+				Block block = trace.next();
+				if (!(block.getType().equals(Material.AIR))) {
+					groundBlock = block;
+					break;
+				}
+				toGround++;
+			}
+
+			Bukkit.getServer().getPluginManager()
+					.callEvent(new PlayerFlyingEvent(player, e.getFrom(), e.getTo(), toGround, groundBlock));
+
+		}
+
 	}
 
 	public void resetPlayer(Player player) {

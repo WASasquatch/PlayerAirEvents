@@ -132,7 +132,8 @@ public final class PlayerInAir extends JavaPlugin implements Listener {
 
 		// Fly Event
 		if (t.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR)
-				&& f.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR)) {
+				&& f.getBlock().getRelative(BlockFace.DOWN, 1).getType().equals(Material.AIR)
+				&& !(f.getBlock().getLocation().equals(t.getBlock().getLocation()))) {
 
 			BlockIterator trace = new BlockIterator(f.getWorld(), f.toVector(),
 					new Vector(BlockFace.DOWN.getModX(), BlockFace.DOWN.getModY(), BlockFace.DOWN.getModZ()), 0, 256);

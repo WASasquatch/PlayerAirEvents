@@ -1,3 +1,6 @@
 name: PlayerAirEvents
-version: 0.0.5-1
+authors: [WAS]
+website: https://www.spigotmc.org/resources/authors/was.46364/
+description: "Adds New Events: PlayerFallEvent, PlayerJumpEvent, PlayerLandedEvent, and PlayerRisingEvent"
+version: 0.0.5-3
 main: wa.was.playerairevents.PlayerInAir
